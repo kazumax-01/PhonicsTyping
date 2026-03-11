@@ -1,9 +1,8 @@
+
 name: pygbag_build
 on: [workflow_dispatch]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  
+
 jobs:
   build-pygbag:
     name: Build for Emscripten pygbag runtime
@@ -20,4 +19,3 @@ jobs:
       with:
         branch: gh-pages
         folder: build/web
-        
