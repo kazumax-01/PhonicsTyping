@@ -606,16 +606,6 @@ async def main():
                     if PASS_RECT.collidepoint(e.pos) and game.current_mode in [MODE_RANDOM, MODE_ABC_PHONICS]:
                         if rabbit_state not in (STATE_CRY, STATE_MOVING_1, STATE_MOVING_2, STATE_MOVING_LEFT_1, STATE_MOVING_LEFT_2, STATE_EAT):
                             game.skip_problem()
-                            
-                    # iPad等のタッチ操作対応: 画面上のキーボードのタップ判定
-                    for row_idx, row in enumerate(KEYBOARD_LAYOUT):
-                        for col_idx, char in enumerate(row):
-                            x = KEYBOARD_START_X + col_idx * KEY_W
-                            y = KEYBOARD_START_Y + row_idx * KEY_H
-                            rect = pygame.Rect(x, y, KEY_W - 5, KEY_H - 5)
-                            if rect.collidepoint(e.pos):
-                                game.handle_key_input(char)
-                                
                 elif game.state == STATE_RESULT and result_btn_rect and result_btn_rect.collidepoint(e.pos): 
                     game.state = STATE_TITLE; play_sound_sound_object(OPENING_SOUND) 
 
@@ -787,13 +777,4 @@ async def main():
         clock.tick(60)
 
 if __name__ == '__main__':
-    try:
-        # 通常のPC環境用
-        asyncio.run(main())
-    except RuntimeError as e:
-        # Web（pygbag / iPad等）ですでにイベントループが回っている場合の処理
-        if "cannot run loop while another loop is running" in str(e):
-            loop = asyncio.get_event_loop()
-            loop.create_task(main())
-        else:
-            raise
+    asyncio.run(main())
